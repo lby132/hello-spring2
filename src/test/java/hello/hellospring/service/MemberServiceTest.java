@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,7 +31,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void join() {
+    void join() throws SQLException {
         final Member member = new Member();
         member.setName("spring");
         final Long saveId = memberService.join(member);
