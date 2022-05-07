@@ -2,36 +2,23 @@ package hello.hellospring.service;
 
 import hello.hellospring.domain.Member;
 import hello.hellospring.repository.MemberRepository;
-import hello.hellospring.repository.MemoryMemberRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.sql.SQLException;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class MemberServiceTest {
+@SpringBootTest
+@Transactional
+class MemberServiceIntegrationTest {
 
-    MemberService memberService;
-    MemoryMemberRepository memberRepository;
-
-    @BeforeEach
-    public void beforeEach() {
-        memberRepository = new MemoryMemberRepository();
-        memberService = new MemberService(memberRepository);
-    }
-
-    @AfterEach
-    void afterEach() {
-        memberRepository.clear();
-    }
+    @Autowired MemberService memberService;
+    @Autowired MemberRepository memberRepository;
 
     @Test
-    void join() throws SQLException {
+    void join() {
         final Member member = new Member();
         member.setName("spring");
         final Long saveId = memberService.join(member);
@@ -61,25 +48,4 @@ class MemberServiceTest {
         }*/
     }
 
-    @Test
-    void findMembers() {
-        final Member member = new Member();
-        member.setName("spring");
-        memberService.join(member);
-        final List<Member> members = memberService.findMembers();
-
-        assertThat(members.size()).isEqualTo(1);
-    }
-
-    @Test
-    void findOne() {
-        final Member member = new Member();
-        member.setName("spring");
-        memberService.join(member);
-
-        Member one = memberService.findOne(member.getId()).get();
-
-        assertThat(one).isEqualTo(member);
-
-    }
 }
